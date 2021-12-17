@@ -5,7 +5,6 @@ import 'http/webclient.dart';
 
 void main() {
   runApp(BytebankApp());
-  findAll().then((transactions) => print('new transactions $transactions'));
 }
 
 class BytebankApp extends StatelessWidget {
