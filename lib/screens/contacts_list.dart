@@ -7,18 +7,14 @@ import 'package:flutter/material.dart';
 
 class ContactsList extends StatefulWidget {
   final ContactDao contactDao;
+
   ContactsList({required this.contactDao});
 
   @override
-  _ContactsListState createState() =>
-      _ContactsListState(contactDao: contactDao);
+  _ContactsListState createState() => _ContactsListState();
 }
 
 class _ContactsListState extends State<ContactsList> {
-  final ContactDao contactDao;
-
-  _ContactsListState({required this.contactDao});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +30,7 @@ class _ContactsListState extends State<ContactsList> {
               break;
             case ConnectionState.waiting:
               return Progress();
+              break;
             case ConnectionState.active:
               break;
             case ConnectionState.done:
@@ -44,26 +41,34 @@ class _ContactsListState extends State<ContactsList> {
                   return _ContactItem(
                     contact,
                     onClick: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => TransactionForm(contact)));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => TransactionForm(contact),
+                        ),
+                      );
                     },
                   );
                 },
                 itemCount: contacts!.length,
               );
+              break;
           }
           return Text('Unknown error');
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ContactForm(
-                contactDao: contactDao,
-              ),
-            ),
-          );
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (context) =>
+                      ContactForm(contactDao: widget.contactDao)))
+              .then((newContact) {
+            if (newContact != null) {
+              setState(() {
+                widget.contactDao.findAll();
+              });
+            }
+          });
         },
         child: Icon(
           Icons.add,

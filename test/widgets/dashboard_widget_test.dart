@@ -2,8 +2,8 @@ import 'package:bytebank/screens/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'matchers.dart';
-import 'mocks.dart';
+import '../matchers/matchers.dart';
+import '../mocks/mocks.dart';
 
 void main() {
   testWidgets('should display the main image the dashboard started',

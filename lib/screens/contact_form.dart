@@ -68,6 +68,6 @@ class _ContactFormState extends State<ContactForm> {
 
   void _save(Contact newContact, BuildContext context) async {
     await contactDao.save(newContact);
-    Navigator.pop(context);
+    Navigator.pop(context, newContact);
   }
 }
