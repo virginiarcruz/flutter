@@ -1,8 +1,12 @@
+import 'package:bytebank/database/app_database.dart';
 import 'package:flutter/material.dart';
-import 'screens/dashboard.dart';
-import 'screens/transferencia/lista.dart';
 
-void main() => runApp(BytebankApp());
+import 'screens/dashboard.dart';
+
+void main() {
+  runApp(BytebankApp());
+  findAll().then((contacts) => debugPrint(contacts.toString()));
+}
 
 class BytebankApp extends StatelessWidget {
   const BytebankApp({Key? key}) : super(key: key);
@@ -16,8 +20,7 @@ class BytebankApp extends StatelessWidget {
           buttonTheme: ButtonThemeData(
             buttonColor: Colors.blueAccent[700],
             textTheme: ButtonTextTheme.primary,
-          )
-      ),
+          )),
       home: Dashboard(),
       // theme: ThemeData(
       //   primaryColor: Colors.green[900],
@@ -30,5 +33,3 @@ class BytebankApp extends StatelessWidget {
     );
   }
 }
-
-
