@@ -1,4 +1,5 @@
 import 'package:bytebank/components/editor.dart';
+import 'package:bytebank/models/transaction.dart';
 import 'package:flutter/material.dart';
 
 const _tituloAppBar = 'Criando transferência';
@@ -54,7 +55,7 @@ class _FormularioTransferenciaState extends State<FormularioTransferencia> {
     final int? numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
     final double? valor = double.tryParse(_controladorCampoValor.text);
     if (numeroConta != null && valor != null) {
-      final transferenciaCriada = Transferencia(valor, numeroConta);
+      final transferenciaCriada = Transaction(valor, numeroConta);
       debugPrint('Criando transferência');
       debugPrint('$transferenciaCriada');
       Navigator.pop(context, transferenciaCriada);
