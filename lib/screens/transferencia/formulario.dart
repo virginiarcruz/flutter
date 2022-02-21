@@ -1,5 +1,4 @@
 import 'package:bytebank/components/editor.dart';
-import 'package:bytebank/models/transferencia.dart';
 import 'package:flutter/material.dart';
 
 const _tituloAppBar = 'Criando transferência';
@@ -13,12 +12,13 @@ const _textoBotaoConfirmar = 'Confirmar';
 
 class FormularioTransferencia extends StatefulWidget {
   @override
-  _FormularioTransferenciaState createState() => _FormularioTransferenciaState();
+  _FormularioTransferenciaState createState() =>
+      _FormularioTransferenciaState();
 }
 
 class _FormularioTransferenciaState extends State<FormularioTransferencia> {
   final TextEditingController _controladorCampoNumeroConta =
-  TextEditingController();
+      TextEditingController();
 
   final TextEditingController _controladorCampoValor = TextEditingController();
 
@@ -49,11 +49,10 @@ class _FormularioTransferenciaState extends State<FormularioTransferencia> {
       ),
     );
   }
+
   void _CriaTransferencia(BuildContext context) {
-    final int? numeroConta =
-    int.tryParse(_controladorCampoNumeroConta.text);
-    final double? valor =
-    double.tryParse(_controladorCampoValor.text);
+    final int? numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
+    final double? valor = double.tryParse(_controladorCampoValor.text);
     if (numeroConta != null && valor != null) {
       final transferenciaCriada = Transferencia(valor, numeroConta);
       debugPrint('Criando transferência');

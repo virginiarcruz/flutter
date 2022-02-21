@@ -1,11 +1,12 @@
-import 'package:bytebank/models/transferencia.dart';
+import 'package:bytebank/models/transaction.dart';
 import 'package:flutter/material.dart';
+
 import 'formulario.dart';
 
 const _tituloAppBar = 'Transferências';
 
 class ListaTransferencias extends StatefulWidget {
-  final List<Transferencia> _transferencias = [];
+  final List<Transaction> _transferencias = [];
 
   @override
   State<StatefulWidget> createState() {
@@ -32,13 +33,14 @@ class ListaTransferenciasState extends State<ListaTransferencias> {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return FormularioTransferencia();
-          })).then((transferenciaRecebida) => _atualiza(transferenciaRecebida!));
+          })).then(
+              (transferenciaRecebida) => _atualiza(transferenciaRecebida!));
         },
       ),
     );
   }
 
-  void _atualiza(Transferencia transferenciaRecebida) {
+  void _atualiza(Transaction transferenciaRecebida) {
     if (transferenciaRecebida != null) {
       setState(() {
         widget._transferencias.add(transferenciaRecebida);
@@ -50,7 +52,7 @@ class ListaTransferenciasState extends State<ListaTransferencias> {
 }
 
 class ItemTransferencia extends StatelessWidget {
-  final Transferencia _transferencia;
+  final Transaction _transferencia;
 
   ItemTransferencia(this._transferencia);
 
