@@ -30,7 +30,6 @@ class _ContactsListState extends State<ContactsList> {
               break;
             case ConnectionState.waiting:
               return Progress();
-              break;
             case ConnectionState.active:
               break;
             case ConnectionState.done:
