@@ -10,45 +10,54 @@ class Dashboard extends StatelessWidget {
         appBar: AppBar(
           title: Text('Dashboard'),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset('images/bytebank_logo.png'),
-            ),
-            Container(
-              height: 120,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
+        body: LayoutBuilder(
+          builder: (context, constaints) => SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constaints.maxHeight,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _FeatureItem(
-                    'Transfer',
-                    Icons.monetization_on,
-                    onClick: () {
-                      _showContactsList(context);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset('images/bytebank_logo.png'),
                   ),
-                  _FeatureItem(
-                    'Transaction Feed',
-                    Icons.description,
-                    onClick: () => _showTransactionsList(context),
+                  Container(
+                    height: 120,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        FeatureItem(
+                          'Transfer',
+                          Icons.monetization_on,
+                          onClick: () {
+                            _showContactsList(context);
+                          },
+                        ),
+                        FeatureItem(
+                          'Transaction Feed',
+                          Icons.description,
+                          onClick: () => _showTransactionsList(context),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
+          ),
         ));
   }
 }
 
-class _FeatureItem extends StatelessWidget {
+class FeatureItem extends StatelessWidget {
   final String name;
   final IconData icon;
   final Function onClick;
 
-  _FeatureItem(this.name, this.icon, {required this.onClick});
+  FeatureItem(this.name, this.icon, {required this.onClick});
 
   @override
   Widget build(BuildContext context) {
