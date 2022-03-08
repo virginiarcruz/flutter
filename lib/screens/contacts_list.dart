@@ -6,15 +6,15 @@ import 'package:bytebank/screens/transaction_form.dart';
 import 'package:flutter/material.dart';
 
 class ContactsList extends StatefulWidget {
+  final ContactDao contactDao;
+
+  ContactsList({required this.contactDao});
+
   @override
   _ContactsListState createState() => _ContactsListState();
 }
 
 class _ContactsListState extends State<ContactsList> {
-  final List<Contact> contacts = [];
-
-  final ContactDao _dao = ContactDao();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,50 +23,56 @@ class _ContactsListState extends State<ContactsList> {
       ),
       body: FutureBuilder<List<Contact>>(
         initialData: [],
-        future: _dao.findAll(),
+        future: widget.contactDao.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               break;
             case ConnectionState.waiting:
               return Progress();
+              break;
             case ConnectionState.active:
               break;
             case ConnectionState.done:
-              if (snapshot.data != null) {
-                final List<Contact> contacts = snapshot.data as List<Contact>;
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    final Contact contact = contacts[index];
-                    return _ContactItem(
-                      contact,
-                      onClick: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => TransactionForm(contact)),
-                        );
-                      },
-                    );
-                  },
-                  itemCount: contacts.length,
-                );
-              }
+              final List<Contact>? contacts = snapshot.data;
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  final Contact contact = contacts![index];
+                  return _ContactItem(
+                    contact,
+                    onClick: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => TransactionForm(contact),
+                        ),
+                      );
+                    },
+                  );
+                },
+                itemCount: contacts!.length,
+              );
               break;
           }
-          return Text('Unknown Error');
+          return Text('Unknown error');
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context)
-              .push(
-                MaterialPageRoute(
-                  builder: (context) => ContactForm(),
-                ),
-              )
-              .then((value) => setState(() {}));
+              .push(MaterialPageRoute(
+                  builder: (context) =>
+                      ContactForm(contactDao: widget.contactDao)))
+              .then((newContact) {
+            if (newContact != null) {
+              setState(() {
+                widget.contactDao.findAll();
+              });
+            }
+          });
         },
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+        ),
       ),
     );
   }
@@ -76,7 +82,10 @@ class _ContactItem extends StatelessWidget {
   final Contact contact;
   final Function onClick;
 
-  _ContactItem(this.contact, {required this.onClick});
+  _ContactItem(
+    this.contact, {
+    required this.onClick,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +94,15 @@ class _ContactItem extends StatelessWidget {
         onTap: () => onClick(),
         title: Text(
           contact.name,
-          style: TextStyle(fontSize: 24.0),
+          style: TextStyle(
+            fontSize: 24.0,
+          ),
         ),
         subtitle: Text(
           contact.accountNumber.toString(),
-          style: TextStyle(fontSize: 16.0),
+          style: TextStyle(
+            fontSize: 16.0,
+          ),
         ),
       ),
     );

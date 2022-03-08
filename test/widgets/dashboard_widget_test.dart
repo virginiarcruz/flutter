@@ -2,10 +2,15 @@ import 'package:bytebank/screens/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../matchers/matchers.dart';
+import '../mocks/mocks.dart';
+
 void main() {
   testWidgets('Should display the main image on Dashboard',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(home: Dashboard()));
+    final mockContactDao = MockContactDao();
+    await tester
+        .pumpWidget(MaterialApp(home: Dashboard(contactDao: mockContactDao)));
     final mainImage = find.byType(Image);
 
     expect(mainImage, findsOneWidget);
@@ -13,9 +18,11 @@ void main() {
 
   testWidgets('Should display the transfer feature when Dashboard is opened',
       (tester) async {
-    await tester.pumpWidget(MaterialApp(home: Dashboard()));
+    final mockContactDao = MockContactDao();
+    await tester
+        .pumpWidget(MaterialApp(home: Dashboard(contactDao: mockContactDao)));
     final transferFeatureItem = find.byWidgetPredicate((widget) {
-      return _featureItemMatcher(widget, 'Transfer', Icons.monetization_on);
+      return featureItemMatcher(widget, 'Transfer', Icons.monetization_on);
     });
     expect(transferFeatureItem, findsOneWidget);
   });
@@ -23,20 +30,15 @@ void main() {
   testWidgets(
       'Should display the transaction feed feature when Dashboard is opened',
       (tester) async {
-    await tester.pumpWidget(MaterialApp(home: Dashboard()));
+    final mockContactDao = MockContactDao();
+    await tester
+        .pumpWidget(MaterialApp(home: Dashboard(contactDao: mockContactDao)));
     final transactionFeedFeatureIcon =
-        find.byWidgetPredicate((widget) => _featureItemMatcher(
+        find.byWidgetPredicate((widget) => featureItemMatcher(
               widget,
               'Transaction Feed',
               Icons.description,
             ));
     expect(transactionFeedFeatureIcon, findsOneWidget);
   });
-}
-
-bool _featureItemMatcher(Widget widget, String name, IconData icon) {
-  if (widget is FeatureItem) {
-    return widget.name == name && widget.icon == icon;
-  }
-  return false;
 }
