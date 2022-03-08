@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../matchers/matchers.dart';
+import 'actions.dart';
 import 'save_contact_flow_test.mocks.dart';
 
 @GenerateMocks([ContactDao])
@@ -26,10 +26,7 @@ void main() {
     final dashboard = find.byType(Dashboard);
     expect(dashboard, findsOneWidget);
 
-    final transferFeatureItem = find.byWidgetPredicate((widget) =>
-        featureItemMatcher(widget, 'Transfer', Icons.monetization_on));
-    expect(transferFeatureItem, findsOneWidget);
-    await tester.tap(transferFeatureItem);
+    await clickOnTheTransferFeatureItem(tester);
     for (int i = 0; i < 5; i++) {
       await tester.pump(Duration(seconds: 1));
     }
@@ -37,7 +34,7 @@ void main() {
     final contactsList = find.byType(ContactsList);
     expect(contactsList, findsOneWidget);
 
-    verify(mockContactDao.findAll()).called(2);
+    verify(mockContactDao.findAll()).called(1);
 
     final fabNewContact = find.widgetWithIcon(FloatingActionButton, Icons.add);
     expect(fabNewContact, findsOneWidget);
@@ -57,7 +54,7 @@ void main() {
     expect(accountNumberTextField, findsOneWidget);
     await tester.enterText(accountNumberTextField, '1000');
 
-    final createButton = find.widgetWithText(RaisedButton, 'Create');
+    final createButton = find.widgetWithText(ElevatedButton, 'Create');
     expect(createButton, findsOneWidget);
     await tester.tap(createButton);
     await tester.pumpAndSettle();
